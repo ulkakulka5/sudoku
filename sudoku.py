@@ -1,6 +1,5 @@
 import sys
 import time
-from termcolor import colored #na internecie znalazłam taką biblioteke do kolorow
 
 def rysujtablice(board):
     for i in range(9):
@@ -11,14 +10,14 @@ def rysujtablice(board):
                 print("|", end=" ")
             if j == 8:
                 if board[i][j] == 0:
-                    print(colored(" ", "red"))
+                    print(" ")
                 else:
-                    print(colored(board[i][j], "green"))
+                    print(board[i][j])
             else:
                 if board[i][j] == 0:
-                    print(colored(" ", "red"), end=" ")
+                    print(" ", end=" ")
                 else:
-                    print(colored(board[i][j], "green"), end=" ")
+                    print(board[i][j], end=" ")
 
 def sprawdz(board, num, pos):
     # sprawdza wiersz
@@ -45,43 +44,50 @@ def puste(board):
                 return (i, j)
     return None
 
-def rozwiaz(board):
-    empty = puste(board)
-    if not empty:
-        return True
-    else:
-        row, col = empty
-    for num in range(1, 10):
-        if sprawdz(board, num, (row, col)):
-            board[row][col] = num
-            if rozwiaz(board):
-                return True
-            board[row][col] = 0
-    return False
+def wprowadz_liczbe(prompt):
+    while True:
+        liczba = input(prompt)
+        if not liczba.isdigit():
+            print("Wprowadź poprawną liczbę.")
+        else:
+            liczba = int(liczba)
+            if liczba < 0 or liczba > 9 :
+                print("Wprowadź liczbę od 0 do 9.")
+            else:
+                return liczba
 
 def start():
     board = [[0 for _ in range(9)] for _ in range(9)]
     print("Wprowadź planszę Sudoku. Użyj 0 dla pustych pól.")
 
-    # Wprowadzanie danych przez gracza
+    # wprowadzanie danych przez gracza
     for i in range(9):
-        row_input = input(f"Wprowadź liczby dla wiersza {i+1}: ")
-        for j in range(9):
-            if row_input[j].isdigit():
-                board[i][j] = int(row_input[j])
+        while True:
+            row_input = input(f"Wprowadź liczby dla wiersza {i+1}: ")
+            if len(row_input) != 9 or not row_input.isdigit():
+                print("Niepoprawne dane. Wprowadź 9 cyfr.")
+                continue
+            row = [int(num) for num in row_input]
+
+            if len(set(row)) != len(row) and row.count(0) != len(row) - 1:
+                print("Niepoprawne dane. Wprowadzona linia zawiera powtórzone liczby.")
+                continue
+            else:
+                board[i] = row
+                break
 
     print("\nPrzed rozwiązaniem:")
     rysujtablice(board)
     print("\nRozwiązywanie Sudoku...\n")
 
     start_time = time.time()
-    if rozwiaz(board):
+    if puste(board):
         end_time = time.time()
-        rozwiaz_time = end_time - start_time
+        puste_time = end_time - start_time
 
         print("Po rozwiązaniu:")
         rysujtablice(board)
-        print(f"\nCzas rozwiązania: {rozwiaz_time:.2f} sekundy")
+        print(f"\nCzas rozwiązania: {puste_time:.2f} sekundy")
     else:
         print("Nie znaleziono rozwiązania dla podanej planszy Sudoku.")
 
