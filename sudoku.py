@@ -61,14 +61,14 @@ def main():
 
         board = [[0 for _ in range(9)] for _ in range(9)]
 
-        print("Wprowadź planszę Sudoku. Użyj 0 dla pustych pól, nie powtarzaj liczb.")
+        print(colored("\nWprowadź planszę Sudoku. Użyj 0 dla pustych pól, nie powtarzaj liczb.\n", "yellow"))
 
         # Wprowadzanie danych przez gracza
         for i in range(9):
             while True:
-                row_input = input(f"Wprowadź liczby dla wiersza {i+1}: ")
+                row_input = input(colored(f"Wprowadź liczby dla wiersza {i+1}: ", "cyan"))
                 if len(row_input) != 9 or not row_input.isdigit():
-                    print("Niepoprawne dane. Wprowadź 9 cyfr.")
+                    print(colored("Niepoprawne dane. Wprowadź 9 cyfr.", "red"))
                     continue
                 row = [int(num) if num.isdigit() else 0 for num in row_input]
 
@@ -78,27 +78,28 @@ def main():
                     board[i] = row
                     break
 
-        print("\nPrzed rozwiązaniem:")
+        print(colored("\nPrzed rozwiązaniem:", "light_cyan"))
         rysuj(board)
-        print("\nRozwiązywanie Sudoku...\n")
+        print(colored("\nRozwiązywanie sudoku...", "yellow"))
 
         start_time = time.time()
         if rozwiaz(board):
             end_time = time.time()
             solve_time = end_time - start_time
 
-            print("Po rozwiązaniu:")
+            print(colored("\nPo rozwiązaniu", "light_cyan"))
             rysuj(board)
-            print(f"\nCzas rozwiązania: {solve_time:.2f} sekundy")
+            print(colored(f"\nCzas rozwiązania: {solve_time:.2f} sekundy", "yellow"))
         else:
-            print(colored('Nie znaleziono rozwiązania dla podanej planszy Sudoku.', 'red'))
+            print(colored('Nie znaleziono rozwiązania dla podanej planszy Sudoku. \n', 'red'))
 
    
      
      
 while True:
-    response = input("Czy chcesz rozwiązać sudoku? (Tak/Nie) ")
+    response = input(colored("\nCzy chcesz rozwiązać sudoku? (Tak/Nie) \n", "yellow"))
     if response.lower() == "tak":
         main()
     else:
+        print(colored("Dziękuję za udział! Miłego dnia :)", "magenta"))
         break
